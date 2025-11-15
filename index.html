@@ -1,98 +1,432 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Narbol Digital</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Narbol Digital — Onde o humano encontra o digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background: #0b0b0d;
-        color: white;
-        overflow-x: hidden;
-    }
+  /* ======================
+     RESET & BASE
+     ====================== */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html,body { height: 100%; }
+  body {
+    font-family: "Poppins", sans-serif;
+    background: #000;
+    color: #fff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x: hidden;
+  }
 
-    .container {
-        width: 100%;
-        min-height: 100vh;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-    }
+  /* ======================
+     LAYOUT PRINCIPAL
+     ====================== */
+  .hero {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: block;
+    overflow: hidden;
+  }
 
-    .content {
-        max-width: 1200px;
-        width: 100%;
-        position: relative;
-    }
+  /* imagem de fundo — a tua fotografia com as mãos */
+  .hero__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(1.05);
+    transform-origin: center center;
+    /* leve zoom-in para efeito cinematic */
+    animation: bgZoom 18s linear infinite alternate;
+  }
 
-    .logo {
-        width: 180px;
-        margin-bottom: 40px;
-    }
+  @keyframes bgZoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.02); }
+  }
 
-    .text-block {
-        margin-top: 40px;
-        animation: fadeIn 2s ease forwards;
-    }
+  /* overlay escuro para garantir legibilidade do texto */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.85) 65%);
+    pointer-events: none;
+  }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+  /* brilho direcionado por cima da mão (spotlight) */
+  .spotlight {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    filter: blur(26px) saturate(140%);
+    transform: translate(-50%,-50%);
+    left: 52%;
+    top: 48%;
+    background: radial-gradient(circle at 35% 35%, rgba(122,140,255,0.95) 0%, rgba(80,110,255,0.6) 10%, rgba(60,80,180,0.15) 40%, rgba(0,0,0,0) 60%);
+    animation: spotlightPulse 3s ease-in-out infinite;
+  }
 
-    .contact-btn {
-        background: linear-gradient(90deg, #c46bff, #7b2dff);
-        padding: 12px 28px;
-        border-radius: 8px;
-        border: none;
-        color: white;
-        cursor: pointer;
-        font-size: 16px;
-        margin-top: 25px;
-        animation: fadeIn 2.5s ease forwards;
-    }
+  @keyframes spotlightPulse {
+    0% { transform: translate(-50%,-50%) scale(0.92); opacity: .85; }
+    50% { transform: translate(-50%,-50%) scale(1.06); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(0.92); opacity: .85; }
+  }
 
-    .hands {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 55%;
-        animation: float 4s ease-in-out infinite;
-    }
+  /* pequeno ponto de toque com glow mais forte (sobreposição circular) */
+  .touch-glow {
+    position: absolute;
+    left: 52%;
+    top: 48%;
+    transform: translate(-50%,-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(200,220,255,0.8) 35%, rgba(120,160,255,0.25) 60%, rgba(0,0,0,0) 100%);
+    filter: blur(6px) drop-shadow(0 0 12px rgba(110,140,255,0.9));
+    animation: touchPulse 1.7s infinite ease-in-out;
+    z-index: 4;
+  }
 
-    @keyframes float {
-        0% { transform: translateY(0); }
-        50% { transform: translateY(-12px); }
-        100% { transform: translateY(0); }
-    }
+  @keyframes touchPulse {
+    0% { transform: translate(-50%,-50%) scale(.9); opacity: .9; }
+    50% { transform: translate(-50%,-50%) scale(1.25); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(.9); opacity: .9; }
+  }
 
-    .contact-info {
-        margin-top: 20px;
-        font-size: 14px;
-        animation: fadeIn 3s ease forwards;
-    }
+  /* ======================
+     HEADER / LOGO / CONTATOS
+     ====================== */
+  .header {
+    position: absolute;
+    left: 5%;
+    top: 4%;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo {
+    width: 154px;
+    height: auto;
+    display: block;
+    background: rgba(255,255,255,0.06);
+    padding: 8px 12px;
+    border-radius: 6px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.6);
+  }
+  .phone {
+    position: absolute;
+    right: 5%;
+    top: 5%;
+    z-index: 6;
+    font-weight: 500;
+    opacity: .95;
+    font-size: 18px;
+    letter-spacing: .4px;
+    background: rgba(255,255,255,0.03);
+    padding: 8px 12px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+  }
 
+  /* ======================
+     CAIXA DE TEXTO PRINCIPAL
+     ====================== */
+  .content {
+    position: absolute;
+    left: 5%;
+    top: 32%;
+    max-width: 520px;
+    z-index: 6;
+    transform-origin: left top;
+    animation: contentIn 1.1s cubic-bezier(.2,.9,.25,1) both;
+  }
+
+  @keyframes contentIn {
+    0% { transform: translateY(24px) scale(.99); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+
+  .title {
+    font-size: 34px;
+    line-height: 1.02;
+    font-weight: 700;
+    margin-bottom: 18px;
+    letter-spacing: -0.4px;
+    text-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  }
+
+  .description {
+    font-size: 16px;
+    color: rgba(255,255,255,0.85);
+    max-width: 420px;
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+
+  /* ======================
+     BOTÃO DE CONTACTO
+     ====================== */
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 22px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+    transform: translateZ(0);
+    box-shadow: 0 10px 30px rgba(120,50,200,0.18);
+    background: linear-gradient(90deg, #c56bff 0%, #7a00ff 100%);
+    color: white;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .cta:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(120,50,200,0.28); }
+
+  /* email no canto inferior esquerdo */
+  .footer-email {
+    position: absolute;
+    left: 5%;
+    bottom: 8%;
+    z-index: 6;
+    font-size: 16px;
+    opacity: .85;
+  }
+
+  /* ======================
+     ANIMAÇÕES SUAVES NAS MÃOS (SOBRE A IMAGEM)
+     ====================== */
+  /* vamos posicionar dois "faux" layers que criam uma sensação de leve movimentação das mãos:
+     - uma camada para a mão humana (direita)
+     - outra para a mão robótica (esquerda)
+     Nós deixamos opacidade e blend para parecerem integradas com a imagem de fundo.
+     **NOTA**: as transformações aplicadas aqui são subtis para não descolar as imagens reais. */
+  .hand-human, .hand-robot {
+    position: absolute;
+    z-index: 5;
+    pointer-events: none;
+    mix-blend-mode: normal;
+    opacity: 0.98;
+    transition: transform 2s cubic-bezier(.2,.9,.25,1), opacity 1s;
+    filter: drop-shadow(0 12px 36px rgba(0,0,0,0.6));
+  }
+
+  /* valores de posição pensados para a tua imagem; ajusta se necessário */
+  .hand-human {
+    right: 9%;
+    top: 38%;
+    width: 480px; /* escala maior para maior detalhe */
+    transform-origin: 60% 40%;
+    animation: humanFloat 8s ease-in-out infinite;
+  }
+  .hand-robot {
+    left: 6%;
+    top: 38%;
+    width: 420px;
+    transform-origin: 40% 60%;
+    animation: robotFloat 9.5s ease-in-out infinite;
+  }
+
+  @keyframes humanFloat {
+    0% { transform: translateY(0) rotate(0.1deg) scale(1); }
+    50% { transform: translateY(-6px) rotate(-0.4deg) scale(1.005); }
+    100% { transform: translateY(0) rotate(0.1deg) scale(1); }
+  }
+  @keyframes robotFloat {
+    0% { transform: translateY(0) rotate(-0.2deg) scale(1); }
+    50% { transform: translateY(6px) rotate(0.3deg) scale(1.002); }
+    100% { transform: translateY(0) rotate(-0.2deg) scale(1); }
+  }
+
+  /* ======================
+     RESPONSIVIDADE
+     ====================== */
+  @media (max-width: 980px) {
+    .title { font-size: 28px; }
+    .content { top: 28%; left: 6%; max-width: 70%; }
+    .hand-human { width: 320px; right: 4%; top: 34%; }
+    .hand-robot { width: 280px; left: 4%; top: 36%; }
+    .spotlight { width: 300px; height: 300px; left: 52%; top: 47%; }
+    .touch-glow { width: 28px; height: 28px; left: 52%; top: 47%; }
+  }
+  @media (max-width: 560px) {
+    .title { font-size: 22px; }
+    .content { top: 30%; left: 6%; max-width: 86%; }
+    .phone { display: none; }
+    .header { left: 4%; top: 3%; }
+  }
+
+  /* alguns refinamentos estéticos */
+  .muted { color: rgba(255,255,255,0.65); font-weight:500; }
 </style>
 </head>
 <body>
-    <div class="container">
-        <div class="content">
-            <img src="hands.jpg" alt="hands" class="hands" />
+  <main class="hero">
 
-            <img src="logo.png" class="logo" />
+    <!-- imagem de fundo (usa a tua imagem enviada) -->
+    <!-- coloca kkk.jpg na mesma pasta do index.html -->
+    <img src="kkk.jpg" alt="mãos humano e robô" class="hero__image" />
 
-            <div class="text-block">
-                <h2>Narbol Digital<br>Onde o humano encontra o digital 💡</h2>
-                <p>Unimos estratégia, criatividade e tecnologia para impulsionar marcas.</p>
-                <button class="contact-btn">Contacte-nos</button>
+    <!-- overlay para legibilidade -->
+    <div class="overlay" aria-hidden="true"></div>
 
-                <div class="contact-info">+258 86 88 066 16<br>narboldigital@gmail.com</div>
-            </div>
-        </div>
+    <!-- spotlight + touch glow (posicionadas sobre o ponto de contacto) -->
+    <div class="spotlight" aria-hidden="true"></div>
+    <div class="touch-glow" aria-hidden="true"></div>
+
+    <!-- header: logo + telefone -->
+    <!-- substitui logo.png pelo teu logótipo (ou mantém como está para placeholder) -->
+    <div class="header" role="banner">
+      <img src="logo.png" alt="Narbol Digital" class="logo" onerror="this.style.display='none'">
     </div>
+    <div class="phone">+258 86 88 066 16</div>
+
+    <!-- conteúdo textual -->
+    <section class="content" role="main" aria-label="Apresentação Narbol">
+      <div class="subtitle">Narbol Digital</div>
+      <h1 class="title">Onde o humano<br>encontra o digital 💡</h1>
+      <p class="description">Unimos estratégia, criatividade e tecnologia para impulsionar marcas.</p>
+      <a class="cta" href="#contact" id="contactBtn" title="Contacte-nos">
+        ➤ contacte-nos
+      </a>
+    </section>
+
+    <!-- email no canto inferior esquerdo -->
+    <div class="footer-email">narboldigital@gmail.com</div>
+
+    <!-- camadas extra com as mãos recortadas (opcionais).
+         Se preferires, podes recortar as mãos e colocar como pngs/transparência aqui para
+         teres mais controlo sobre movimento. Por enquanto são escondidas (comentadas).
+         Se colocares imagens específicas de mão humana / robô com fundo transparente,
+         descomenta e substitui os srcs.
+    -->
+    <!-- exemplo de uso:
+    <img class="hand-robot" src="robot_hand.png" alt="" aria-hidden="true" />
+    <img class="hand-human" src="human_hand.png" alt="" aria-hidden="true" />
+    -->
+    <!-- Mantemos placeholders com opacity 0 (não mostram) -->
+    <img class="hand-robot" src="" alt="" style="display:none;" aria-hidden="true">
+    <img class="hand-human" src="" alt="" style="display:none;" aria-hidden="true">
+
+  </main>
+
+<script>
+/* ======================
+   JS: Interatividade & ajustes finos do efeito de toque
+   ====================== */
+
+/* Função para animar o ponto de toque (move e intensifica o brilho)
+   Fazemos um pequeno efeito no load e também quando o utilizador passa o rato/ toca.
+*/
+(function(){
+  const spotlight = document.querySelector('.spotlight');
+  const glow = document.querySelector('.touch-glow');
+  const heroImage = document.querySelector('.hero__image');
+
+  // Posição aproximada relativa à imagem (se precisares de ajustar, muda estes offsets)
+  let baseX = 0.52; // 52% da largura
+  let baseY = 0.48; // 48% da altura
+
+  function placeEffects(xPercent, yPercent) {
+    // aplica posição
+    spotlight.style.left = (xPercent * 100) + '%';
+    spotlight.style.top  = (yPercent * 100) + '%';
+    glow.style.left = (xPercent * 100) + '%';
+    glow.style.top  = (yPercent * 100) + '%';
+  }
+
+  // posição inicial
+  placeEffects(baseX, baseY);
+
+  // tente ajustar automaticamente com base nas dimensões reais da imagem
+  // (correção leve para telas pequenas)
+  function recomputeForViewport(){
+    const w = window.innerWidth;
+    if (w < 560) {
+      placeEffects(baseX, baseY - 0.01);
+    } else if (w < 980) {
+      placeEffects(baseX, baseY - 0.005);
+    } else {
+      placeEffects(baseX, baseY);
+    }
+  }
+  window.addEventListener('resize', recomputeForViewport);
+  recomputeForViewport();
+
+  // ao clicar no botão de contacto fazemos um micro-burst de glow
+  const contactBtn = document.getElementById('contactBtn');
+  contactBtn.addEventListener('pointerdown', () => {
+    glowAnimateBurst();
+  });
+
+  function glowAnimateBurst(){
+    glow.animate([
+      { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+      { transform: 'translate(-50%,-50%) scale(1.9)', opacity: 0.95 },
+      { transform: 'translate(-50%,-50%) scale(.9)', opacity: 0.9 }
+    ], {
+      duration: 520,
+      easing: 'cubic-bezier(.2,.9,.25,1)'
+    });
+  }
+
+  // adiciona um pequeno seguimento do ponteiro (quando o utilizador move o rato,
+  // o brilho segue suavemente — só em desktop)
+  let followAnim;
+  window.addEventListener('pointermove', (e) => {
+    if (window.innerWidth < 760) return; // desliga em mobile
+    const rect = heroImage.getBoundingClientRect();
+    // se o cursor estiver fora da imagem, ignora
+    if (e.clientX < rect.left || e.clientX > rect.right || e.clientY < rect.top || e.clientY > rect.bottom) return;
+    const xPct = (e.clientX - rect.left) / rect.width;
+    const yPct = (e.clientY - rect.top) / rect.height;
+    // limita valores para não sair muito do enquadramento
+    const clamp = (v, a=0.32, b=0.68) => Math.max(a, Math.min(b, v));
+    const nx = clamp(xPct, 0.28, 0.78);
+    const ny = clamp(yPct, 0.28, 0.78);
+
+    cancelAnimationFrame(followAnim);
+    followAnim = requestAnimationFrame(() => {
+      spotlight.style.left = (nx*100) + '%';
+      spotlight.style.top  = (ny*100) + '%';
+      glow.style.left = (nx*100) + '%';
+      glow.style.top  = (ny*100) + '%';
+    });
+  });
+
+  // efeito de "pop" ao carregar a página
+  window.addEventListener('load', () => {
+    glowAnimateBurst();
+    setTimeout(() => {
+      // leve aumento do spotlight inicial
+      spotlight.animate([
+        { transform: 'translate(-50%,-50%) scale(.9)', opacity: .85 },
+        { transform: 'translate(-50%,-50%) scale(1.12)', opacity: 1 },
+        { transform: 'translate(-50%,-50%) scale(.98)', opacity: .95 }
+      ], { duration: 900, easing: 'cubic-bezier(.2,.9,.25,1)' });
+    }, 220);
+  });
+
+})();
+</script>
 </body>
-</html>
+    </html>
+    
