@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Narbol Digital</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #0b0b0d;
+        color: white;
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .content {
+        max-width: 1200px;
+        width: 100%;
+        position: relative;
+    }
+
+    .logo {
+        width: 180px;
+        margin-bottom: 40px;
+    }
+
+    .text-block {
+        margin-top: 40px;
+        animation: fadeIn 2s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .contact-btn {
+        background: linear-gradient(90deg, #c46bff, #7b2dff);
+        padding: 12px 28px;
+        border-radius: 8px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 25px;
+        animation: fadeIn 2.5s ease forwards;
+    }
+
+    .hands {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 55%;
+        animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+        100% { transform: translateY(0); }
+    }
+
+    .contact-info {
+        margin-top: 20px;
+        font-size: 14px;
+        animation: fadeIn 3s ease forwards;
+    }
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="content">
+            <img src="hands.jpg" alt="hands" class="hands" />
+
+            <img src="logo.png" class="logo" />
+
+            <div class="text-block">
+                <h2>Narbol Digital<br>Onde o humano encontra o digital 💡</h2>
+                <p>Unimos estratégia, criatividade e tecnologia para impulsionar marcas.</p>
+                <button class="contact-btn">Contacte-nos</button>
+
+                <div class="contact-info">+258 86 88 066 16<br>narboldigital@gmail.com</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
