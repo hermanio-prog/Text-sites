@@ -3,171 +3,152 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Seu Site de Imóveis — Hermanio Cuamba</title>
+  <title>Site Imobiliário — Hermanio Cuamba</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#f6f8fb;
-      --primary:#0b4fd6; /* tom azul do site */
+      --bg:#eef1f5; /* branco menos brilhante */
+      --primary:#0b4fd6;
       --dark:#0b254c;
       --muted:#6b7280;
-      --card:#ffffff;
+      --card:#fafbfc;
       --glass: rgba(255,255,255,0.06);
+      --ripple: rgba(255,255,255,0.3);
     }
-    *{box-sizing:border-box}
-    body{font-family:'Poppins',sans-serif;margin:0;background:var(--bg);color:var(--dark);-webkit-font-smoothing:antialiased}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden}
 
-    /* Header / Navbar */
-    .nav{display:flex;justify-content:space-between;align-items:center;padding:22px 40px;background:transparent}
-    .brand{display:flex;gap:12px;align-items:center}
+    /* Ripple animation */
+    .ripple{position:relative;overflow:hidden}
+    .ripple:after{
+      content:'';position:absolute;border-radius:50%;transform:scale(0);
+      background:var(--ripple);width:120px;height:120px;opacity:0;
+      pointer-events:none;
+      transition:transform .4s, opacity .6s;
+    }
+    .ripple:active:after{
+      transform:scale(3);opacity:1;
+      left:var(--x);top:var(--y);
+    }
+
+    /* Scroll reveal */
+    .reveal{opacity:0;transform:translateY(40px);transition:all .7s ease}
+    .reveal.active{opacity:1;transform:translateY(0)}
+
+    /* Navbar */
+    .nav{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;background:transparent}
     .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#2fb6ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    .nav-links{display:flex;gap:18px;align-items:center}
-    .btn-ghost{padding:10px 14px;border-radius:8px;border:1px solid rgba(11,79,214,0.12);background:transparent}
 
     /* HERO */
-    .hero{position:relative;height:68vh;min-height:420px;display:flex;align-items:center;color:white}
-    .hero::before{content:'';position:absolute;inset:0;background-image:url('R2.jpg');background-size:cover;background-position:center;filter:contrast(1.02);z-index:0}
-    /* degradê escuro sobre a imagem para legibilidade */
-    .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,18,0.55) 0%, rgba(3,7,18,0.25) 45%, rgba(3,7,18,0.0) 100%);z-index:1}
-    .hero-inner{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:48px;text-align:left}
-    .eyebrow{display:inline-block;background:rgba(255,255,255,0.12);padding:8px 12px;border-radius:999px;font-weight:600;margin-bottom:18px}
-    h1{font-size:48px;margin:0 0 14px;line-height:1.03}
-    p.lead{color:rgba(255,255,255,0.92);max-width:680px;margin:0 0 22px;font-size:18px}
-    .search-row{display:flex;gap:12px;background:rgba(255,255,255,0.1);padding:12px;border-radius:12px;backdrop-filter:blur(6px);width:100%;max-width:760px}
-    .search-row input{flex:1;padding:12px;border:0;background:transparent;color:white;outline:none}
-    .search-row button{background:var(--primary);border:0;padding:10px 16px;border-radius:10px;color:white;font-weight:600}
+    .hero{position:relative;height:72vh;display:flex;align-items:center;color:white}
+    .hero::before{content:'';position:absolute;inset:0;background:url('R2.jpg') center/cover no-repeat;z-index:0}
+    .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.55),rgba(0,0,0,0.15));z-index:1}
+    .hero-inner{position:relative;z-index:2;max-width:1100px;margin:auto;padding:32px}
 
-    /* Content */
-    .container{max-width:1100px;margin:36px auto;padding:0 20px}
-    .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    /* Search */
+    .search-row{display:flex;gap:12px;background:rgba(255,255,255,0.08);padding:12px;border-radius:12px;backdrop-filter:blur(6px);max-width:760px}
+    .search-row input{flex:1;padding:12px;border:0;background:transparent;color:white}
+    .search-row button{background:var(--primary);border:0;padding:12px 18px;border-radius:10px;color:white;font-weight:600;cursor:pointer}
+
+    /* Cards */
+    .container{max-width:1100px;margin:48px auto;padding:0 20px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
     .card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(15,15,30,0.06);transition:transform .25s}
     .card:hover{transform:translateY(-6px)}
-    .card img{width:100%;height:220px;object-fit:cover;display:block}
+    .card img{width:100%;height:220px;object-fit:cover}
     .card-body{padding:16px}
-    .price{font-weight:700;color:var(--primary);margin-bottom:6px}
-    .meta{color:var(--muted);font-size:14px}
+    .price{font-weight:700;color:var(--primary)}
+
+    /* New sections */
+    .why,.process,.testimonials{margin-top:60px}
+    .why-items,.process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:20px}
+    .why-box,.step{background:white;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.06)}
 
     /* Footer */
-    footer{background:var(--dark);color:rgba(255,255,255,0.88);padding:28px 20px;margin-top:40px}
-    .footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .signature{display:flex;flex-direction:column}
-    .signature .name{font-weight:700}
-    .contacts{display:flex;gap:12px;align-items:center}
-    .icon{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(255,255,255,0.06)}
-    .socials{display:flex;gap:8px;align-items:center}
-    .socials a{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;color:white;text-decoration:none;background:transparent}
+    footer{background:var(--dark);color:white;padding:32px 20px;margin-top:60px}
 
-    /* Responsive */
-    @media(max-width:880px){
-      .cards{grid-template-columns:1fr}
-      h1{font-size:34px}
-      .hero{height:56vh}
-      .footer-inner{flex-direction:column;align-items:flex-start}
+    @media(max-width:780px){
+      h1{font-size:28px}
+      .hero{height:60vh}
+      .search-row{flex-direction:column}
+      .search-row button{width:100%}
     }
   </style>
 </head>
 <body>
-  <header class="nav">
-    <div class="brand">
-      <div class="logo">H</div>
-      <div>
-        <div style="font-weight:700">Rent H&U — PT</div>
-        <div style="font-size:13px;color:var(--muted)">Imóveis &amp; Destaques</div>
-      </div>
-    </div>
-    <nav class="nav-links">
-      <a class="btn-ghost">Entrar</a>
-      <a class="btn-ghost">Cadastre-se</a>
-    </nav>
-  </header>
 
-  <section class="hero">
-    <div class="hero-inner">
-      <span class="eyebrow">Encontre sua casa</span>
-      <h1>Encontrar sua nova casa é simples</h1>
-      <p class="lead">Explore uma seleção premium de imóveis à venda e para alugar. Fotos reais, informações detalhadas e suporte dedicado para encontrar seu próximo lar.</p>
-      <div class="search-row" role="search">
-        <input placeholder="Cidade, bairro ou referência" aria-label="Pesquisar imóveis" />
-        <button>Pesquisar</button>
-      </div>
+<header class="nav reveal">
+  <div style="display:flex;gap:12px;align-items:center">
+    <div class="logo">H</div>
+    <div>
+      <div style="font-weight:700">Rent H&U — PT</div>
+      <div style="font-size:13px;color:var(--muted)">Imóveis & Destaques</div>
+    </div>
+  </div>
+  <div>
+    <button class="ripple" style="background:transparent;border:1px solid #ffffff33;padding:10px 14px;border-radius:8px;color:white">Entrar</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner reveal">
+    <span style="background:rgba(255,255,255,0.12);padding:8px 12px;border-radius:999px;font-weight:600">Encontre sua casa</span>
+    <h1>Encontrar sua nova casa é simples</h1>
+    <p style="max-width:600px">Explore imóveis premium à venda e para alugar. Informações detalhadas para te ajudar a tomar a melhor decisão.</p>
+    <div class="search-row ripple">
+      <input placeholder="Pesquisar casas" />
+      <button class="ripple">Pesquisar</button>
+    </div>
+  </div>
+</section>
+
+<main class="container">
+
+  <h2 class="reveal">Mais Vistos</h2>
+  <div class="cards">
+    <div class="card reveal"><img src="R1.jpg"><div class="card-body"><div class="price">USD 420,000</div><div>Casa moderna</div></div></div>
+    <div class="card reveal"><img src="R2.jpg"><div class="card-body"><div class="price">USD 1,250/mês</div><div>Casa com piscina</div></div></div>
+    <div class="card reveal"><img src="R3.jpg"><div class="card-body"><div class="price">USD 650,000</div><div>Residência de luxo</div></div></div>
+  </div>
+
+  <!-- Why choose us -->
+  <section class="why reveal">
+    <h2>Por que escolher-nos?</h2>
+    <div class="why-items">
+      <div class="why-box">✔ Atendimento personalizado</div>
+      <div class="why-box">✔ Imóveis reais e atualizados</div>
+      <div class="why-box">✔ Suporte 24h no WhatsApp</div>
     </div>
   </section>
 
-  <main class="container">
-    <div class="section-title">
-      <h2>Mais Vistos</h2>
-      <div style="color:var(--muted)">Mostrando 3 propriedades</div>
+  <!-- Process -->
+  <section class="process reveal">
+    <h2>Como funciona?</h2>
+    <div class="process-steps">
+      <div class="step">1️⃣ Pesquise imóveis</div>
+      <div class="step">2️⃣ Agende uma visita</div>
+      <div class="step">3️⃣ Feche negócio</div>
     </div>
+  </section>
 
-    <div class="cards">
-      <article class="card">
-        <img src="R1.jpg" alt="Casa 1" />
-        <div class="card-body">
-          <div class="price">USD 420,000</div>
-          <div style="font-weight:600">Casa moderna com jardim</div>
-          <div class="meta">4 quartos • 3 banheiros • 320 m²</div>
-        </div>
-      </article>
+</main>
 
-      <article class="card">
-        <img src="R2.jpg" alt="Casa 2" />
-        <div class="card-body">
-          <div class="price">USD 1,250 / mês</div>
-          <div style="font-weight:600">Casa com piscina e área externa</div>
-          <div class="meta">3 quartos • 2 banheiros • Piscina</div>
-        </div>
-      </article>
+<footer class="reveal">
+  <div>Desenvolvido por <b>Hermanio Cuamba</b></div>
+  <div>WhatsApp: 844714332</div>
+  <div>Instagram & Facebook: Mr.s tech line</div>
+</footer>
 
-      <article class="card">
-        <img src="R3.jpg" alt="Casa 3" />
-        <div class="card-body">
-          <div class="price">USD 650,000</div>
-          <div style="font-weight:600">Residência de luxo</div>
-          <div class="meta">5 quartos • 4 banheiros • Garagem</div>
-        </div>
-      </article>
-    </div>
+<script>
+// Scroll reveal
+const reveals=document.querySelectorAll('.reveal');
+function reveal(){reveals.forEach(el=>{const top=el.getBoundingClientRect().top;if(top<window.innerHeight-80){el.classList.add('active')}})}
+window.addEventListener('scroll',reveal);reveal();
 
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="signature">
-        <div class="name">Desenvolvido por Hermanio Cuamba</div>
-        <div style="font-size:14px;color:rgba(255,255,255,0.76)">Mr.s tech line</div>
-      </div>
-
-      <div class="contacts">
-        <a class="socials" href="https://wa.me/258844714332" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-          <span class="icon" aria-hidden="true"> 
-            <!-- WhatsApp SVG -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.52 3.48A11.86 11.86 0 0 0 12 0C5.37 0 .07 5.29.07 11.92c0 2.1.55 4.16 1.6 5.99L0 24l6.38-1.64a11.9 11.9 0 0 0 5.62 1.4h.01c6.63 0 11.93-5.29 11.93-11.92 0-3.19-1.24-6.18-3.42-8.36zM12 21.8a9.71 9.71 0 0 1-4.95-1.34l-.36-.22-3.79.98.99-3.7-.23-.39A9.7 9.7 0 1 1 21.7 12c0 5.36-4.35 9.7-9.7 9.7z" fill="currentColor"/></svg>
-          </span>
-          <span style="font-weight:600">+258 844714332</span>
-        </a>
-
-        <div style="width:16px"></div>
-
-        <a class="socials" href="https://instagram.com/mr.s_tech_line" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <span class="icon">
-            <!-- Instagram SVG -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.16c3.2 0 3.584.012 4.85.07 1.17.056 1.97.24 2.428.403.6.218 1.03.48 1.48.93.45.45.71.88.93 1.48.163.458.347 1.26.403 2.43.058 1.27.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.056 1.17-.24 1.97-.403 2.428-.218.6-.48 1.03-.93 1.48-.45.45-.88.71-1.48.93-.458.163-1.26.347-2.43.403-1.27.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.056-1.97-.24-2.428-.403-.6-.218-1.03-.48-1.48-.93-.45-.45-.71-.88-.93-1.48-.163-.458-.347-1.26-.403-2.43-.058-1.27-.07-1.65-.07-4.85s.012-3.584.07-4.85c.056-1.17.24-1.97.403-2.428.218-.6.48-1.03.93-1.48.45-.45.88-.71 1.48-.93.458-.163 1.26-.347 2.43-.403C8.416 2.172 8.8 2.16 12 2.16zm0 1.8c-3.13 0-3.49.01-4.72.068-1.02.051-1.57.22-1.94.367-.48.19-.82.42-1.18.78-.36.36-.59.7-.78 1.18-.146.37-.316.92-.367 1.94-.058 1.23-.068 1.59-.068 4.72s.01 3.49.068 4.72c.051 1.02.22 1.57.367 1.94.19.48.42.82.78 1.18.36.36.7.59 1.18.78.37.146.92.316 1.94.367 1.23.058 1.59.068 4.72.068s3.49-.01 4.72-.068c1.02-.051 1.57-.22 1.94-.367.48-.19.82-.42 1.18-.78.36-.36.59-.7.78-1.18.146-.37.316-.92.367-1.94.058-1.23.068-1.59.068-4.72s-.01-3.49-.068-4.72c-.051-1.02-.22-1.57-.367-1.94-.19-.48-.42-.82-.78-1.18-.36-.36-.7-.59-1.18-.78-.37-.146-.92-.316-1.94-.367-1.23-.058-1.59-.068-4.72-.068zM12 6.44a5.56 5.56 0 1 0 0 11.12 5.56 5.56 0 0 0 0-11.12zm0 9.16a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2zm5.4-9.84a1.3 1.3 0 1 1-2.6 0 1.3 1.3 0 0 1 2.6 0z" fill="currentColor"/></svg>
-          </span>
-          <span>@Mr.s tech line</span>
-        </a>
-
-        <a class="socials" href="https://facebook.com/mr.s.tech.line" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-          <span class="icon">
-            <!-- Facebook SVG -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07C2 17.06 5.66 21.16 10.44 21.94v-6.99H7.9v-2.88h2.54V9.77c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.45h-1.25c-1.24 0-1.62.77-1.62 1.56v1.88h2.76l-.44 2.88h-2.32V21.94C18.34 21.16 22 17.06 22 12.07z" fill="currentColor"/></svg>
-          </span>
-          <span>Mr.s tech line</span>
-        </a>
-      </div>
-
-    </div>
-  </footer>
+// Ripple effect position
+function setRipple(e){const r=e.currentTarget;const x=e.clientX-r.getBoundingClientRect().left;const y=e.clientY-r.getBoundingClientRect().top;r.style.setProperty('--x',x+'px');r.style.setProperty('--y',y+'px');}
+document.querySelectorAll('.ripple').forEach(b=>b.addEventListener('pointerdown',setRipple));
+</script>
 
 </body>
 </html>
