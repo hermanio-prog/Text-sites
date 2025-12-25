@@ -1,153 +1,277 @@
-<!doctype html>
-<html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Imobiliário — Hermanio Cuamba</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#eef1f5; /* branco menos brilhante */
-      --primary:#0b4fd6;
-      --dark:#0b254c;
-      --muted:#6b7280;
-      --card:#fafbfc;
-      --glass: rgba(255,255,255,0.06);
-      --ripple: rgba(255,255,255,0.3);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--dark);overflow-x:hidden}
+<meta charset="UTF-8">
+<title>Mini Auto-Condutor | Hermanio Cuamba</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    /* Ripple animation */
-    .ripple{position:relative;overflow:hidden}
-    .ripple:after{
-      content:'';position:absolute;border-radius:50%;transform:scale(0);
-      background:var(--ripple);width:120px;height:120px;opacity:0;
-      pointer-events:none;
-      transition:transform .4s, opacity .6s;
-    }
-    .ripple:active:after{
-      transform:scale(3);opacity:1;
-      left:var(--x);top:var(--y);
-    }
+<style>
+/* ===================== RESET ===================== */
+*{box-sizing:border-box;margin:0;padding:0}
 
-    /* Scroll reveal */
-    .reveal{opacity:0;transform:translateY(40px);transition:all .7s ease}
-    .reveal.active{opacity:1;transform:translateY(0)}
+/* ===================== GERAL ===================== */
+body{
+    font-family:Arial, sans-serif;
+    background:#111;
+    color:#fff;
+    text-align:center;
+}
+h1,h2,h3{margin:10px 0}
+button{
+    padding:10px 15px;
+    margin:5px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+    font-weight:bold;
+}
+.hidden{display:none}
 
-    /* Navbar */
-    .nav{display:flex;justify-content:space-between;align-items:center;padding:22px 26px;background:transparent}
-    .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--primary),#2fb6ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+/* ===================== CABEÇALHO ===================== */
+header{
+    background:#000;
+    padding:15px;
+}
+header span{
+    font-size:14px;
+    color:#ccc;
+}
 
-    /* HERO */
-    .hero{position:relative;height:72vh;display:flex;align-items:center;color:white}
-    .hero::before{content:'';position:absolute;inset:0;background:url('R2.jpg') center/cover no-repeat;z-index:0}
-    .hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.55),rgba(0,0,0,0.15));z-index:1}
-    .hero-inner{position:relative;z-index:2;max-width:1100px;margin:auto;padding:32px}
+/* ===================== MENU ===================== */
+#menu{
+    padding:20px;
+}
+.menu-btn{
+    background:#0a7;
+    color:#fff;
+    width:250px;
+}
 
-    /* Search */
-    .search-row{display:flex;gap:12px;background:rgba(255,255,255,0.08);padding:12px;border-radius:12px;backdrop-filter:blur(6px);max-width:760px}
-    .search-row input{flex:1;padding:12px;border:0;background:transparent;color:white}
-    .search-row button{background:var(--primary);border:0;padding:12px 18px;border-radius:10px;color:white;font-weight:600;cursor:pointer}
+/* ===================== QUIZ ===================== */
+#quiz{
+    max-width:600px;
+    margin:auto;
+    padding:20px;
+}
+.option{
+    display:block;
+    width:100%;
+    background:#333;
+    color:#fff;
+    margin:8px 0;
+}
+.option:hover{background:#555}
 
-    /* Cards */
-    .container{max-width:1100px;margin:48px auto;padding:0 20px}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
-    .card{background:var(--card);border-radius:12px;overflow:hidden;box-shadow:0 6px 18px rgba(15,15,30,0.06);transition:transform .25s}
-    .card:hover{transform:translateY(-6px)}
-    .card img{width:100%;height:220px;object-fit:cover}
-    .card-body{padding:16px}
-    .price{font-weight:700;color:var(--primary)}
+/* ===================== JOGO CONDUÇÃO ===================== */
+#drive{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:20px;
+}
+#road{
+    position:relative;
+    width:300px;
+    height:500px;
+    background:#555;
+    border:4px solid #fff;
+    overflow:hidden;
+}
+#road::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    width:6px;
+    height:100%;
+    background:repeating-linear-gradient(
+        to bottom,
+        #fff,#fff 20px,transparent 20px,transparent 40px
+    );
+    transform:translateX(-50%);
+}
+#car{
+    position:absolute;
+    bottom:20px;
+    left:120px;
+    width:60px;
+    height:100px;
+    background:red;
+    border-radius:10px;
+}
+#signal{
+    position:absolute;
+    top:-90px;
+    left:105px;
+    width:90px;
+    height:90px;
+    border-radius:50%;
+    background:yellow;
+    color:#000;
+    font-weight:bold;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+#info{
+    width:260px;
+    background:#000;
+    padding:15px;
+    border-radius:10px;
+}
 
-    /* New sections */
-    .why,.process,.testimonials{margin-top:60px}
-    .why-items,.process-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;margin-top:20px}
-    .why-box,.step{background:white;border-radius:14px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.06)}
-
-    /* Footer */
-    footer{background:var(--dark);color:white;padding:32px 20px;margin-top:60px}
-
-    @media(max-width:780px){
-      h1{font-size:28px}
-      .hero{height:60vh}
-      .search-row{flex-direction:column}
-      .search-row button{width:100%}
-    }
-  </style>
+/* ===================== FINAL ===================== */
+#result{
+    padding:20px;
+}
+</style>
 </head>
+
 <body>
 
-<header class="nav reveal">
-  <div style="display:flex;gap:12px;align-items:center">
-    <div class="logo">H</div>
-    <div>
-      <div style="font-weight:700">Rent H&U — PT</div>
-      <div style="font-size:13px;color:var(--muted)">Imóveis & Destaques</div>
-    </div>
-  </div>
-  <div>
-    <button class="ripple" style="background:transparent;border:1px solid #ffffff33;padding:10px 14px;border-radius:8px;color:white">Entrar</button>
-  </div>
+<header>
+<h1>🚗 Mini Auto-Condutor</h1>
+<p>Jogo educativo de Escola de Condução</p>
+<span>Desenvolvido por <strong>Hermanio Cuamba</strong></span>
 </header>
 
-<section class="hero">
-  <div class="hero-inner reveal">
-    <span style="background:rgba(255,255,255,0.12);padding:8px 12px;border-radius:999px;font-weight:600">Encontre sua casa</span>
-    <h1>Encontrar sua nova casa é simples</h1>
-    <p style="max-width:600px">Explore imóveis premium à venda e para alugar. Informações detalhadas para te ajudar a tomar a melhor decisão.</p>
-    <div class="search-row ripple">
-      <input placeholder="Pesquisar casas" />
-      <button class="ripple">Pesquisar</button>
-    </div>
-  </div>
+<!-- ===================== MENU ===================== -->
+<section id="menu">
+<h2>Escolha o Modo</h2>
+<button class="menu-btn" onclick="startQuiz()">📘 Estudar (Quiz Teórico)</button><br>
+<button class="menu-btn" onclick="startDrive()">🚦 Prática de Condução</button>
 </section>
 
-<main class="container">
+<!-- ===================== QUIZ ===================== -->
+<section id="quiz" class="hidden">
+<h2 id="qTitle"></h2>
+<div id="options"></div>
+<p id="feedback"></p>
+<button onclick="nextQuestion()">Próxima</button>
+</section>
 
-  <h2 class="reveal">Mais Vistos</h2>
-  <div class="cards">
-    <div class="card reveal"><img src="R1.jpg"><div class="card-body"><div class="price">USD 420,000</div><div>Casa moderna</div></div></div>
-    <div class="card reveal"><img src="R2.jpg"><div class="card-body"><div class="price">USD 1,250/mês</div><div>Casa com piscina</div></div></div>
-    <div class="card reveal"><img src="R3.jpg"><div class="card-body"><div class="price">USD 650,000</div><div>Residência de luxo</div></div></div>
-  </div>
+<!-- ===================== CONDUÇÃO ===================== -->
+<section id="drive" class="hidden">
+<div id="road">
+<div id="car"></div>
+<div id="signal"></div>
+</div>
 
-  <!-- Why choose us -->
-  <section class="why reveal">
-    <h2>Por que escolher-nos?</h2>
-    <div class="why-items">
-      <div class="why-box">✔ Atendimento personalizado</div>
-      <div class="why-box">✔ Imóveis reais e atualizados</div>
-      <div class="why-box">✔ Suporte 24h no WhatsApp</div>
-    </div>
-  </section>
+<div id="info">
+<h3>Sinal Atual</h3>
+<p id="signalText"></p>
+<p>Pontuação: <span id="score">0</span></p>
+<p><strong>Teclas:</strong></p>
+<p>P = STOP</p>
+<p>C = CEDER</p>
+<p>V = VELOCIDADE</p>
+</div>
+</section>
 
-  <!-- Process -->
-  <section class="process reveal">
-    <h2>Como funciona?</h2>
-    <div class="process-steps">
-      <div class="step">1️⃣ Pesquise imóveis</div>
-      <div class="step">2️⃣ Agende uma visita</div>
-      <div class="step">3️⃣ Feche negócio</div>
-    </div>
-  </section>
-
-</main>
-
-<footer class="reveal">
-  <div>Desenvolvido por <b>Hermanio Cuamba</b></div>
-  <div>WhatsApp: 844714332</div>
-  <div>Instagram & Facebook: Mr.s tech line</div>
-</footer>
+<!-- ===================== RESULTADO ===================== -->
+<section id="result" class="hidden"></section>
 
 <script>
-// Scroll reveal
-const reveals=document.querySelectorAll('.reveal');
-function reveal(){reveals.forEach(el=>{const top=el.getBoundingClientRect().top;if(top<window.innerHeight-80){el.classList.add('active')}})}
-window.addEventListener('scroll',reveal);reveal();
+/* ===================== QUIZ ===================== */
+const quizData=[
+{q:"O que significa o sinal STOP?",o:["Parar completamente","Abrande","Estacione","Siga"],a:0},
+{q:"Quem tem prioridade numa rotunda?",o:["Quem entra","Quem circula","Peões","Ônibus"],a:1},
+{q:"Velocidade máxima em zona urbana?",o:["30","40","50","60"],a:2},
+{q:"Sinal triangular com borda vermelha significa?",o:["Obrigação","Proibição","Perigo","Informação"],a:2},
+{q:"Luz amarela no semáforo significa?",o:["Parar se seguro","Acelerar","Ignorar","Ultrapassar"],a:0}
+];
 
-// Ripple effect position
-function setRipple(e){const r=e.currentTarget;const x=e.clientX-r.getBoundingClientRect().left;const y=e.clientY-r.getBoundingClientRect().top;r.style.setProperty('--x',x+'px');r.style.setProperty('--y',y+'px');}
-document.querySelectorAll('.ripple').forEach(b=>b.addEventListener('pointerdown',setRipple));
+let qIndex=0, qScore=0;
+
+function startQuiz(){
+menu.classList.add("hidden");
+quiz.classList.remove("hidden");
+loadQuestion();
+}
+
+function loadQuestion(){
+const q=quizData[qIndex];
+qTitle.innerText=q.q;
+options.innerHTML="";
+feedback.innerText="";
+q.o.forEach((op,i)=>{
+const b=document.createElement("button");
+b.className="option";
+b.innerText=op;
+b.onclick=()=>checkAnswer(i);
+options.appendChild(b);
+});
+}
+
+function checkAnswer(i){
+if(i===quizData[qIndex].a){
+qScore+=2;
+feedback.innerText="✔️ Correto";
+}else{
+feedback.innerText="❌ Errado";
+}
+}
+
+function nextQuestion(){
+qIndex++;
+if(qIndex<quizData.length){
+loadQuestion();
+}else{
+quiz.classList.add("hidden");
+result.classList.remove("hidden");
+result.innerHTML=`<h2>Resultado</h2>
+<p>Pontuação: ${qScore}</p>
+<p>Continue praticando para passar no exame.</p>
+<button onclick="location.reload()">Voltar</button>`;
+}
+}
+
+/* ===================== CONDUÇÃO ===================== */
+let carX=120, signalY=-90, score=0, speed=3;
+const signals=[
+{t:"STOP",k:"p",d:"Parar completamente"},
+{t:"CEDA",k:"c",d:"Dar prioridade"},
+{t:"50",k:"v",d:"Velocidade máxima 50"}
+];
+let current=null;
+
+function startDrive(){
+menu.classList.add("hidden");
+drive.classList.remove("hidden");
+newSignal();
+loop();
+}
+
+function newSignal(){
+current=signals[Math.floor(Math.random()*signals.length)];
+signal.innerText=current.t;
+signalText.innerText=current.d;
+signalY=-90;
+}
+
+document.addEventListener("keydown",e=>{
+if(e.key==="ArrowLeft" && carX>0)carX-=20;
+if(e.key==="ArrowRight" && carX<240)carX+=20;
+if(current && e.key.toLowerCase()===current.k){
+score+=5;
+speed+=0.2;
+scoreSpan();
+newSignal();
+}
+car.style.left=carX+"px";
+});
+
+function scoreSpan(){scoreEl.innerText=score}
+
+function loop(){
+signalY+=speed;
+signal.style.top=signalY+"px";
+if(signalY>500){
+score-=3;
+scoreSpan();
+newSignal();
+}
+requestAnimationFrame(loop);
+}
 </script>
 
 </body>
