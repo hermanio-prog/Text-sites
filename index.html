@@ -412,11 +412,11 @@
             
             <div class="progress-section">
                 <div class="progress-circle">
-                    <span>75%</span>
+                    <span id="progressPercentage">0%</span>
                 </div>
                 <div>
                     <h3>Progresso Geral</h3>
-                    <p>3 de 4 módulos completados</p>
+                    <p id="progressText">0 de 4 módulos completados</p>
                 </div>
             </div>
         </div>
@@ -466,14 +466,11 @@
                 </div>
                 
                 <div class="quiz-question" id="quizQuestion">
-                    Em uma via com duas faixas por sentido, qual é a faixa correta para seguir em frente?
+                    Carregando questão...
                 </div>
                 
                 <div class="quiz-options" id="quizOptions">
-                    <div class="quiz-option" data-option="A">Faixa da direita</div>
-                    <div class="quiz-option" data-option="B">Faixa da esquerda</div>
-                    <div class="quiz-option" data-option="C">Qualquer uma das faixas</div>
-                    <div class="quiz-option" data-option="D">Depende da velocidade</div>
+                    <!-- As opções serão carregadas via JavaScript -->
                 </div>
                 
                 <div class="result-message" id="quizResult"></div>
@@ -500,7 +497,7 @@
                 
                 <div class="signal-game">
                     <div class="signal-display" id="signalDisplay">
-                        <i class="fas fa-triangle-exclamation"></i>
+                        <i class="fas fa-traffic-light"></i>
                     </div>
                     
                     <div class="quiz-question" id="signalQuestion">
@@ -508,10 +505,7 @@
                     </div>
                     
                     <div class="signal-options" id="signalOptions">
-                        <div class="signal-option" data-option="A">Proibido estacionar</div>
-                        <div class="signal-option" data-option="B">Aviso de perigo</div>
-                        <div class="signal-option" data-option="C">Obrigação de virar à direita</div>
-                        <div class="signal-option" data-option="D">Paragem obrigatória</div>
+                        <!-- As opções serão carregadas via JavaScript -->
                     </div>
                     
                     <div class="result-message" id="signalResult"></div>
@@ -538,10 +532,7 @@
                 
                 <div class="parking-game">
                     <div class="parking-area" id="parkingArea">
-                        <div class="car" id="car" style="top: 50px; left: 50px;">C</div>
-                        <div class="parking-spot" id="parkingSpot" style="width: 80px; height: 120px; top: 200px; left: 300px;"></div>
-                        <div class="parking-spot" style="width: 80px; height: 120px; top: 200px; left: 400px;"></div>
-                        <div class="parking-spot" style="width: 80px; height: 120px; top: 200px; left: 500px;"></div>
+                        <!-- Carro e vagas serão adicionadas via JavaScript -->
                     </div>
                     
                     <div class="car-controls">
@@ -576,8 +567,879 @@
                 </div>
                 
                 <div class="quiz-question" id="priorityQuestion">
-                    Em um cruzamento sem sinalização, quem tem prioridade de passagem?
+                    Carregando cenário...
                 </div>
                 
                 <div class="quiz-options" id="priorityOptions">
-                    <div class="quiz-option" data-option="A">O v
+                    <!-- As opções serão carregadas via JavaScript -->
+                </div>
+                
+                <div class="result-message" id="priorityResult"></div>
+                
+                <div class="quiz-controls">
+                    <button class="btn btn-primary" id="prioritySubmit" disabled>Confirmar Resposta</button>
+                    <button class="btn btn-success" id="priorityNext" style="display: none;">Próximo Cenário</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>Simulador de Escola de Condução &copy; 2023 - Desenvolvido para ajudar futuros condutores a passarem no exame</p>
+            <p>Este jogo é educativo e não substitui a formação oficial de uma escola de condução.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Dados do jogo - AGORA COMPLETOS E FUNCIONAIS
+        const gameData = {
+            quiz: {
+                currentQuestion: 0,
+                score: 0,
+                completed: false,
+                questions: [
+                    {
+                        question: "Em uma via com duas faixas por sentido, qual é a faixa correta para seguir em frente?",
+                        options: [
+                            "Faixa da direita",
+                            "Faixa da esquerda", 
+                            "Qualquer uma das faixas",
+                            "Depende da velocidade"
+                        ],
+                        correct: 0,
+                        hint: "A faixa da direita é a mais indicada para seguir em frente, deixando a esquerda para ultrapassagens."
+                    },
+                    {
+                        question: "Qual a distância mínima de segurança que deve manter em relação ao veículo da frente?",
+                        options: [
+                            "Distância equivalente a 2 segundos",
+                            "Distância equivalente a 1 segundo",
+                            "Distância de 10 metros",
+                            "Distância de 5 metros"
+                        ],
+                        correct: 0,
+                        hint: "A distância de segurança deve ser de pelo menos 2 segundos em condições normais."
+                    },
+                    {
+                        question: "O que deve fazer ao aproximar-se de uma passadeira para peões?",
+                        options: [
+                            "Reduzir a velocidade e estar preparado para parar",
+                            "Acelerar para passar rapidamente",
+                            "Manter a velocidade se não vir peões",
+                            "Buzinar para alertar os peões"
+                        ],
+                        correct: 0,
+                        hint: "Sempre reduza a velocidade ao aproximar-se de uma passadeira e esteja preparado para parar."
+                    },
+                    {
+                        question: "Quando é obrigatório o uso de luzes de cruzamento (médios)?",
+                        options: [
+                            "Durante a noite e em condições de visibilidade reduzida",
+                            "Apenas em autoestradas",
+                            "Apenas dentro das localidades",
+                            "Nunca é obrigatório"
+                        ],
+                        correct: 0,
+                        hint: "As luzes de cruzamento são obrigatórias durante a noite e em condições de visibilidade reduzida."
+                    },
+                    {
+                        question: "O que indica uma linha contínua na estrada?",
+                        options: [
+                            "Proibição de ultrapassar",
+                            "Pode ultrapassar com cuidado",
+                            "Estacionamento permitido",
+                            "Via de sentido único"
+                        ],
+                        correct: 0,
+                        hint: "Uma linha contínua indica que é proibido ultrapassar."
+                    }
+                ]
+            },
+            signals: {
+                currentSignal: 0,
+                score: 0,
+                completed: false,
+                signals: [
+                    {
+                        icon: "fas fa-triangle-exclamation",
+                        color: "#ff9800",
+                        question: "O que significa este sinal de trânsito?",
+                        options: [
+                            "Proibido estacionar",
+                            "Aviso de perigo",
+                            "Obrigação de virar à direita",
+                            "Paragem obrigatória"
+                        ],
+                        correct: 1,
+                        explanation: "Este é um sinal de aviso de perigo. Indica que há uma situação de perigo à frente, como uma curva perigosa, cruzamento ou obras."
+                    },
+                    {
+                        icon: "fas fa-stop",
+                        color: "#f44336",
+                        question: "O que deve fazer ao encontrar este sinal?",
+                        options: [
+                            "Parar obrigatoriamente",
+                            "Reduzir a velocidade",
+                            "Acelerar rapidamente",
+                            "Virar à esquerda"
+                        ],
+                        correct: 0,
+                        explanation: "Este é o sinal de paragem obrigatória. Deve parar completamente antes de prosseguir."
+                    },
+                    {
+                        icon: "fas fa-ban",
+                        color: "#f44336",
+                        question: "O que indica este sinal circular vermelho?",
+                        options: [
+                            "Proibido estacionar",
+                            "Sentido proibido",
+                            "Proibido ultrapassar",
+                            "Velocidade mínima"
+                        ],
+                        correct: 1,
+                        explanation: "Este sinal indica sentido proibido. Não pode entrar na via onde este sinal está colocado."
+                    },
+                    {
+                        icon: "fas fa-arrow-up",
+                        color: "#2196f3",
+                        question: "O que significa este sinal azul com seta branca?",
+                        options: [
+                            "Obrigação de seguir em frente",
+                            "Sentido único",
+                            "Paragem obrigatória",
+                            "Proibido virar à direita"
+                        ],
+                        correct: 0,
+                        explanation: "Este sinal indica obrigação de seguir em frente. Não pode virar à esquerda ou à direita."
+                    },
+                    {
+                        icon: "fas fa-person-walking",
+                        color: "#4caf50",
+                        question: "O que indica este sinal?",
+                        options: [
+                            "Passagem para peões",
+                            "Proibido a peões",
+                            "Área residencial",
+                            "Ciclistas na via"
+                        ],
+                        correct: 0,
+                        explanation: "Este sinal indica passagem para peões. Deve reduzir a velocidade e ceder passagem aos peões."
+                    },
+                    {
+                        icon: "fas fa-bicycle",
+                        color: "#2196f3",
+                        question: "O que significa este sinal?",
+                        options: [
+                            "Pista para ciclistas",
+                            "Proibido a ciclistas",
+                            "Ciclistas a atravessar",
+                            "Estacionamento de bicicletas"
+                        ],
+                        correct: 0,
+                        explanation: "Este sinal indica pista ou via reservada para ciclistas."
+                    }
+                ]
+            },
+            priority: {
+                currentScenario: 0,
+                score: 0,
+                completed: false,
+                scenarios: [
+                    {
+                        question: "Em um cruzamento sem sinalização, quem tem prioridade de passagem?",
+                        options: [
+                            "O veículo que chegar primeiro ao cruzamento",
+                            "O veículo que vem pela direita",
+                            "O veículo maior",
+                            "O veículo mais rápido"
+                        ],
+                        correct: 1,
+                        hint: "A regra geral é dar prioridade ao veículo que vem pela direita em cruzamentos não sinalizados."
+                    },
+                    {
+                        question: "Numa rotunda, qual a prioridade correta?",
+                        options: [
+                            "Os veículos que já estão na rotunda têm prioridade",
+                            "Os veículos que vão entrar na rotunda têm prioridade",
+                            "O veículo maior tem sempre prioridade",
+                            "O veículo mais rápido tem prioridade"
+                        ],
+                        correct: 0,
+                        hint: "Na rotunda, os veículos que já estão circulando têm prioridade sobre os que pretendem entrar."
+                    },
+                    {
+                        question: "Ao sair de um parque de estacionamento para a via pública, quem tem prioridade?",
+                        options: [
+                            "Os veículos na via pública",
+                            "O veículo que sai do parque",
+                            "O veículo que buzinar primeiro",
+                            "Depende da hora do dia"
+                        ],
+                        correct: 0,
+                        hint: "Ao sair de uma propriedade privada para a via pública, deve dar prioridade a todos os veículos na via pública."
+                    },
+                    {
+                        question: "Quando um veículo de emergência (ambulância, bombeiros) se aproxima com sinais luminosos e sonoros, o que deve fazer?",
+                        options: [
+                            "Ceder passagem imediatamente, desviando-se se necessário",
+                            "Manter a posição e velocidade",
+                            "Acelerar para sair rapidamente do caminho",
+                            "Parar imediatamente no meio da via"
+                        ],
+                        correct: 0,
+                        hint: "Deve ceder passagem imediatamente aos veículos de emergência, desviando-se para a direita se possível."
+                    }
+                ]
+            },
+            parking: {
+                completed: false
+            }
+        };
+
+        // Estado global do jogo
+        let currentGame = null;
+        let selectedOption = null;
+        let parkingMoves = 0;
+        let carRotation = 0;
+        let carPosition = { x: 50, y: 50 };
+        let progress = {
+            quiz: false,
+            signals: false,
+            parking: false,
+            priority: false
+        };
+
+        // Elementos do DOM
+        const mainMenu = document.getElementById('mainMenu');
+        const quizGame = document.getElementById('quizGame');
+        const signalsGame = document.getElementById('signalsGame');
+        const parkingGame = document.getElementById('parkingGame');
+        const priorityGame = document.getElementById('priorityGame');
+
+        // Inicialização do jogo
+        function initGame() {
+            // Configurar menu principal
+            const menuCards = document.querySelectorAll('.menu-card');
+            menuCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const game = this.getAttribute('data-game');
+                    startGame(game);
+                });
+            });
+
+            // Configurar botões de voltar
+            document.getElementById('backFromQuiz').addEventListener('click', () => showMainMenu());
+            document.getElementById('backFromSignals').addEventListener('click', () => showMainMenu());
+            document.getElementById('backFromParking').addEventListener('click', () => showMainMenu());
+            document.getElementById('backFromPriority').addEventListener('click', () => showMainMenu());
+
+            // Configurar jogo de quiz
+            setupQuizGame();
+            
+            // Configurar jogo de sinais
+            setupSignalsGame();
+            
+            // Configurar jogo de estacionamento
+            setupParkingGame();
+            
+            // Configurar jogo de prioridades
+            setupPriorityGame();
+            
+            // Atualizar progresso inicial
+            updateProgress();
+        }
+
+        // Atualizar barra de progresso
+        function updateProgress() {
+            let completedCount = 0;
+            if (progress.quiz) completedCount++;
+            if (progress.signals) completedCount++;
+            if (progress.parking) completedCount++;
+            if (progress.priority) completedCount++;
+            
+            const percentage = Math.round((completedCount / 4) * 100);
+            document.getElementById('progressPercentage').textContent = `${percentage}%`;
+            document.getElementById('progressText').textContent = `${completedCount} de 4 módulos completados`;
+            
+            // Atualizar círculo de progresso
+            const progressCircle = document.querySelector('.progress-circle');
+            progressCircle.style.background = `conic-gradient(#4CAF50 0% ${percentage}%, #eee ${percentage}% 100%)`;
+        }
+
+        // Funções do jogo
+        function startGame(game) {
+            currentGame = game;
+            mainMenu.style.display = 'none';
+            
+            // Esconder todos os jogos
+            quizGame.classList.remove('active');
+            signalsGame.classList.remove('active');
+            parkingGame.classList.remove('active');
+            priorityGame.classList.remove('active');
+            
+            // Mostrar o jogo selecionado
+            switch(game) {
+                case 'quiz':
+                    startQuiz();
+                    quizGame.classList.add('active');
+                    break;
+                case 'signals':
+                    startSignals();
+                    signalsGame.classList.add('active');
+                    break;
+                case 'parking':
+                    startParking();
+                    parkingGame.classList.add('active');
+                    break;
+                case 'priority':
+                    startPriority();
+                    priorityGame.classList.add('active');
+                    break;
+            }
+        }
+
+        function showMainMenu() {
+            currentGame = null;
+            quizGame.classList.remove('active');
+            signalsGame.classList.remove('active');
+            parkingGame.classList.remove('active');
+            priorityGame.classList.remove('active');
+            mainMenu.style.display = 'grid';
+        }
+
+        // Quiz Teórico
+        function setupQuizGame() {
+            document.getElementById('quizSubmit').addEventListener('click', submitQuizAnswer);
+            document.getElementById('quizNext').addEventListener('click', nextQuizQuestion);
+            document.getElementById('quizHint').addEventListener('click', showQuizHint);
+        }
+
+        function startQuiz() {
+            gameData.quiz.currentQuestion = 0;
+            gameData.quiz.score = 0;
+            gameData.quiz.completed = false;
+            updateQuizUI();
+        }
+
+        function updateQuizUI() {
+            const quiz = gameData.quiz;
+            const currentQ = quiz.questions[quiz.currentQuestion];
+            
+            document.getElementById('quizQuestion').textContent = currentQ.question;
+            document.getElementById('quizQuestionNum').textContent = quiz.currentQuestion + 1;
+            document.getElementById('quizScore').textContent = quiz.score;
+            
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            
+            currentQ.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                optionElement.dataset.option = String.fromCharCode(65 + index); // A, B, C, D
+                optionElement.textContent = option;
+                
+                optionElement.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    document.querySelectorAll('#quizOptions .quiz-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Selecionar nova opção
+                    this.classList.add('selected');
+                    selectedOption = this.dataset.option;
+                    
+                    // Ativar botão de confirmar
+                    document.getElementById('quizSubmit').disabled = false;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            document.getElementById('quizSubmit').disabled = true;
+            document.getElementById('quizSubmit').style.display = 'block';
+            document.getElementById('quizNext').style.display = 'none';
+            document.getElementById('quizResult').className = 'result-message';
+            document.getElementById('quizResult').textContent = '';
+        }
+
+        function submitQuizAnswer() {
+            const quiz = gameData.quiz;
+            const currentQ = quiz.questions[quiz.currentQuestion];
+            const options = document.querySelectorAll('#quizOptions .quiz-option');
+            const resultMessage = document.getElementById('quizResult');
+            
+            // Verificar resposta
+            const correctIndex = currentQ.correct;
+            const selectedIndex = selectedOption.charCodeAt(0) - 65; // Converter A, B, C, D para 0, 1, 2, 3
+            
+            if (selectedIndex === correctIndex) {
+                // Resposta correta
+                quiz.score += 20;
+                options[selectedIndex].classList.add('correct');
+                resultMessage.textContent = "✓ Resposta correta! Bom trabalho!";
+                resultMessage.className = 'result-message success';
+            } else {
+                // Resposta incorreta
+                options[selectedIndex].classList.add('wrong');
+                options[correctIndex].classList.add('correct');
+                resultMessage.textContent = `✗ Resposta incorreta. A resposta correta é: ${currentQ.options[correctIndex]}`;
+                resultMessage.className = 'result-message error';
+            }
+            
+            // Atualizar pontuação
+            document.getElementById('quizScore').textContent = quiz.score;
+            
+            // Mostrar botão para próxima pergunta
+            document.getElementById('quizSubmit').style.display = 'none';
+            document.getElementById('quizNext').style.display = 'block';
+        }
+
+        function nextQuizQuestion() {
+            gameData.quiz.currentQuestion++;
+            
+            if (gameData.quiz.currentQuestion < gameData.quiz.questions.length) {
+                updateQuizUI();
+            } else {
+                // Fim do quiz
+                gameData.quiz.completed = true;
+                progress.quiz = true;
+                updateProgress();
+                
+                document.getElementById('quizQuestion').textContent = "Quiz concluído!";
+                document.getElementById('quizQuestionNum').textContent = "5/5";
+                
+                const optionsContainer = document.getElementById('quizOptions');
+                optionsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 30px;">
+                        <h3 style="color: #1e3c72; margin-bottom: 15px;">Resultado Final</h3>
+                        <p style="font-size: 1.2rem; margin-bottom: 10px;">Sua pontuação: <strong>${gameData.quiz.score} de 100 pontos</strong></p>
+                        <p style="font-size: 1.1rem; color: ${gameData.quiz.score >= 70 ? '#4CAF50' : '#f44336'}">
+                            ${gameData.quiz.score >= 70 ? "🎉 Parabéns! Você está preparado para o exame teórico!" : "📚 Continue estudando para melhorar seu desempenho!"}
+                        </p>
+                    </div>
+                `;
+                
+                document.getElementById('quizSubmit').style.display = 'none';
+                document.getElementById('quizNext').style.display = 'none';
+                document.getElementById('quizResult').className = 'result-message';
+                document.getElementById('quizResult').textContent = '';
+            }
+        }
+
+        function showQuizHint() {
+            const quiz = gameData.quiz;
+            const currentQ = quiz.questions[quiz.currentQuestion];
+            const resultMessage = document.getElementById('quizResult');
+            
+            resultMessage.textContent = `💡 Dica: ${currentQ.hint}`;
+            resultMessage.className = 'result-message success';
+        }
+
+        // Reconhecimento de Sinais
+        function setupSignalsGame() {
+            document.getElementById('signalSubmit').addEventListener('click', submitSignalAnswer);
+            document.getElementById('signalNext').addEventListener('click', nextSignal);
+        }
+
+        function startSignals() {
+            gameData.signals.currentSignal = 0;
+            gameData.signals.score = 0;
+            gameData.signals.completed = false;
+            updateSignalsUI();
+        }
+
+        function updateSignalsUI() {
+            const signals = gameData.signals;
+            const currentS = signals.signals[signals.currentSignal];
+            
+            const signalDisplay = document.getElementById('signalDisplay');
+            signalDisplay.innerHTML = `<i class="${currentS.icon}"></i>`;
+            signalDisplay.style.color = currentS.color;
+            
+            document.getElementById('signalQuestion').textContent = currentS.question;
+            document.getElementById('signalNum').textContent = signals.currentSignal + 1;
+            document.getElementById('signalsScore').textContent = signals.score;
+            
+            const optionsContainer = document.getElementById('signalOptions');
+            optionsContainer.innerHTML = '';
+            
+            currentS.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'signal-option';
+                optionElement.dataset.option = String.fromCharCode(65 + index);
+                optionElement.textContent = option;
+                
+                optionElement.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    document.querySelectorAll('#signalOptions .signal-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Selecionar nova opção
+                    this.classList.add('selected');
+                    selectedOption = this.dataset.option;
+                    
+                    // Ativar botão de confirmar
+                    document.getElementById('signalSubmit').disabled = false;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            document.getElementById('signalSubmit').disabled = true;
+            document.getElementById('signalSubmit').style.display = 'block';
+            document.getElementById('signalNext').style.display = 'none';
+            document.getElementById('signalResult').className = 'result-message';
+            document.getElementById('signalResult').textContent = '';
+        }
+
+        function submitSignalAnswer() {
+            const signals = gameData.signals;
+            const currentS = signals.signals[signals.currentSignal];
+            const options = document.querySelectorAll('#signalOptions .signal-option');
+            const resultMessage = document.getElementById('signalResult');
+            
+            // Verificar resposta
+            const correctIndex = currentS.correct;
+            const selectedIndex = selectedOption.charCodeAt(0) - 65;
+            
+            if (selectedIndex === correctIndex) {
+                // Resposta correta
+                signals.score++;
+                options[selectedIndex].classList.add('correct');
+                resultMessage.textContent = `✓ Correto! ${currentS.explanation}`;
+                resultMessage.className = 'result-message success';
+            } else {
+                // Resposta incorreta
+                options[selectedIndex].classList.add('wrong');
+                options[correctIndex].classList.add('correct');
+                resultMessage.textContent = `✗ Incorreto. ${currentS.explanation}`;
+                resultMessage.className = 'result-message error';
+            }
+            
+            // Atualizar pontuação
+            document.getElementById('signalsScore').textContent = signals.score;
+            
+            // Mostrar botão para próximo sinal
+            document.getElementById('signalSubmit').style.display = 'none';
+            document.getElementById('signalNext').style.display = 'block';
+        }
+
+        function nextSignal() {
+            gameData.signals.currentSignal++;
+            
+            if (gameData.signals.currentSignal < gameData.signals.signals.length) {
+                updateSignalsUI();
+            } else {
+                // Fim do jogo de sinais
+                gameData.signals.completed = true;
+                progress.signals = true;
+                updateProgress();
+                
+                document.getElementById('signalQuestion').textContent = "Treino de sinais concluído!";
+                document.getElementById('signalNum').textContent = "6/6";
+                
+                const signalDisplay = document.getElementById('signalDisplay');
+                signalDisplay.innerHTML = '<i class="fas fa-flag-checkered"></i>';
+                signalDisplay.style.color = '#4CAF50';
+                
+                const optionsContainer = document.getElementById('signalOptions');
+                optionsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 20px; grid-column: 1 / -1;">
+                        <h3 style="color: #1e3c72; margin-bottom: 15px;">Resultado Final</h3>
+                        <p style="font-size: 1.2rem; margin-bottom: 10px;">Você acertou <strong>${gameData.signals.score} de 6 sinais</strong></p>
+                        <p style="font-size: 1.1rem; color: ${gameData.signals.score >= 5 ? '#4CAF50' : '#f44336'}">
+                            ${gameData.signals.score >= 5 ? "🏆 Excelente! Você conhece bem os sinais de trânsito!" : "📘 Continue praticando para reconhecer todos os sinais!"}
+                        </p>
+                    </div>
+                `;
+                
+                document.getElementById('signalSubmit').style.display = 'none';
+                document.getElementById('signalNext').style.display = 'none';
+                document.getElementById('signalResult').className = 'result-message';
+                document.getElementById('signalResult').textContent = '';
+            }
+        }
+
+        // Estacionamento
+        function setupParkingGame() {
+            document.getElementById('carLeft').addEventListener('click', () => moveCar('left'));
+            document.getElementById('carRight').addEventListener('click', () => moveCar('right'));
+            document.getElementById('carUp').addEventListener('click', () => moveCar('up'));
+            document.getElementById('carDown').addEventListener('click', () => moveCar('down'));
+            document.getElementById('carRotate').addEventListener('click', rotateCar);
+            document.getElementById('parkCar').addEventListener('click', checkParking);
+            document.getElementById('resetParking').addEventListener('click', resetParking);
+            document.getElementById('parkingHint').addEventListener('click', showParkingHint);
+        }
+
+        function startParking() {
+            const parkingArea = document.getElementById('parkingArea');
+            parkingArea.innerHTML = '';
+            
+            // Criar carro
+            const car = document.createElement('div');
+            car.id = 'car';
+            car.className = 'car';
+            car.textContent = 'C';
+            car.style.top = '50px';
+            car.style.left = '50px';
+            car.style.transform = 'rotate(0deg)';
+            parkingArea.appendChild(car);
+            
+            // Criar vagas de estacionamento
+            const parkingSpot1 = document.createElement('div');
+            parkingSpot1.className = 'parking-spot';
+            parkingSpot1.id = 'parkingSpot1';
+            parkingSpot1.style.width = '80px';
+            parkingSpot1.style.height = '120px';
+            parkingSpot1.style.top = '200px';
+            parkingSpot1.style.left = '300px';
+            parkingArea.appendChild(parkingSpot1);
+            
+            const parkingSpot2 = document.createElement('div');
+            parkingSpot2.className = 'parking-spot';
+            parkingSpot2.style.width = '80px';
+            parkingSpot2.style.height = '120px';
+            parkingSpot2.style.top = '200px';
+            parkingSpot2.style.left = '400px';
+            parkingArea.appendChild(parkingSpot2);
+            
+            const parkingSpot3 = document.createElement('div');
+            parkingSpot3.className = 'parking-spot';
+            parkingSpot3.style.width = '80px';
+            parkingSpot3.style.height = '120px';
+            parkingSpot3.style.top = '200px';
+            parkingSpot3.style.left = '500px';
+            parkingArea.appendChild(parkingSpot3);
+            
+            // Resetar variáveis
+            parkingMoves = 0;
+            carRotation = 0;
+            carPosition = { x: 50, y: 50 };
+            
+            document.getElementById('parkingMoves').textContent = '0';
+            document.getElementById('parkingResult').className = 'result-message';
+            document.getElementById('parkingResult').textContent = '';
+            
+            // Definir vaga alvo (a primeira)
+            window.targetParkingSpot = parkingSpot1;
+        }
+
+        function moveCar(direction) {
+            const car = document.getElementById('car');
+            let newX = carPosition.x;
+            let newY = carPosition.y;
+            
+            switch(direction) {
+                case 'left':
+                    newX = Math.max(10, carPosition.x - 10);
+                    break;
+                case 'right':
+                    newX = Math.min(730, carPosition.x + 10);
+                    break;
+                case 'up':
+                    newY = Math.max(10, carPosition.y - 10);
+                    break;
+                case 'down':
+                    newY = Math.min(280, carPosition.y + 10);
+                    break;
+            }
+            
+            carPosition.x = newX;
+            carPosition.y = newY;
+            
+            car.style.left = `${newX}px`;
+            car.style.top = `${newY}px`;
+            
+            parkingMoves++;
+            document.getElementById('parkingMoves').textContent = parkingMoves;
+        }
+
+        function rotateCar() {
+            const car = document.getElementById('car');
+            carRotation = (carRotation + 90) % 360;
+            car.style.transform = `rotate(${carRotation}deg)`;
+            
+            parkingMoves++;
+            document.getElementById('parkingMoves').textContent = parkingMoves;
+        }
+
+        function checkParking() {
+            const car = document.getElementById('car');
+            const targetSpot = window.targetParkingSpot;
+            const resultMessage = document.getElementById('parkingResult');
+            
+            const carRect = {
+                left: carPosition.x,
+                top: carPosition.y,
+                right: carPosition.x + 60,
+                bottom: carPosition.y + 100
+            };
+            
+            const spotRect = {
+                left: parseInt(targetSpot.style.left),
+                top: parseInt(targetSpot.style.top),
+                right: parseInt(targetSpot.style.left) + 80,
+                bottom: parseInt(targetSpot.style.top) + 120
+            };
+            
+            // Verificar se o carro está dentro da vaga
+            const isInSpot = 
+                carRect.left >= spotRect.left &&
+                carRect.right <= spotRect.right &&
+                carRect.top >= spotRect.top &&
+                carRect.bottom <= spotRect.bottom;
+            
+            // Verificar se o carro está alinhado (ângulo correto)
+            const isAligned = carRotation === 0 || carRotation === 180;
+            
+            if (isInSpot && isAligned) {
+                resultMessage.textContent = "🎉 Parabéns! Você estacionou perfeitamente!";
+                resultMessage.className = 'result-message success';
+                gameData.parking.completed = true;
+                progress.parking = true;
+                updateProgress();
+            } else if (isInSpot && !isAligned) {
+                resultMessage.textContent = "Quase lá! O carro está na vaga, mas não está alinhado corretamente. Tente girar o carro para 0° ou 180°.";
+                resultMessage.className = 'result-message error';
+            } else {
+                resultMessage.textContent = "Tente novamente! O carro não está dentro da vaga de estacionamento.";
+                resultMessage.className = 'result-message error';
+            }
+        }
+
+        function resetParking() {
+            startParking();
+        }
+
+        function showParkingHint() {
+            const resultMessage = document.getElementById('parkingResult');
+            resultMessage.textContent = "💡 Dica: Use as setas para mover o carro lentamente até a vaga tracejada à direita. Use o botão 'Girar' para alinhar o carro com a vaga (0° ou 180°). O objetivo é colocar o carro completamente dentro da área tracejada.";
+            resultMessage.className = 'result-message success';
+        }
+
+        // Prioridades no Trânsito
+        function setupPriorityGame() {
+            document.getElementById('prioritySubmit').addEventListener('click', submitPriorityAnswer);
+            document.getElementById('priorityNext').addEventListener('click', nextPriorityScenario);
+        }
+
+        function startPriority() {
+            gameData.priority.currentScenario = 0;
+            gameData.priority.score = 0;
+            gameData.priority.completed = false;
+            updatePriorityUI();
+        }
+
+        function updatePriorityUI() {
+            const priority = gameData.priority;
+            const currentS = priority.scenarios[priority.currentScenario];
+            
+            document.getElementById('priorityQuestion').textContent = currentS.question;
+            document.getElementById('priorityNum').textContent = priority.currentScenario + 1;
+            document.getElementById('priorityScore').textContent = priority.score;
+            
+            const optionsContainer = document.getElementById('priorityOptions');
+            optionsContainer.innerHTML = '';
+            
+            currentS.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'quiz-option';
+                optionElement.dataset.option = String.fromCharCode(65 + index);
+                optionElement.textContent = option;
+                
+                optionElement.addEventListener('click', function() {
+                    // Remover seleção anterior
+                    document.querySelectorAll('#priorityOptions .quiz-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Selecionar nova opção
+                    this.classList.add('selected');
+                    selectedOption = this.dataset.option;
+                    
+                    // Ativar botão de confirmar
+                    document.getElementById('prioritySubmit').disabled = false;
+                });
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            document.getElementById('prioritySubmit').disabled = true;
+            document.getElementById('prioritySubmit').style.display = 'block';
+            document.getElementById('priorityNext').style.display = 'none';
+            document.getElementById('priorityResult').className = 'result-message';
+            document.getElementById('priorityResult').textContent = '';
+        }
+
+        function submitPriorityAnswer() {
+            const priority = gameData.priority;
+            const currentS = priority.scenarios[priority.currentScenario];
+            const options = document.querySelectorAll('#priorityOptions .quiz-option');
+            const resultMessage = document.getElementById('priorityResult');
+            
+            // Verificar resposta
+            const correctIndex = currentS.correct;
+            const selectedIndex = selectedOption.charCodeAt(0) - 65;
+            
+            if (selectedIndex === correctIndex) {
+                // Resposta correta
+                priority.score += 25;
+                options[selectedIndex].classList.add('correct');
+                resultMessage.textContent = "✓ Correto! Você entende bem as prioridades no trânsito!";
+                resultMessage.className = 'result-message success';
+            } else {
+                // Resposta incorreta
+                options[selectedIndex].classList.add('wrong');
+                options[correctIndex].classList.add('correct');
+                resultMessage.textContent = `✗ Incorreto. A resposta correta é: ${currentS.options[correctIndex]}`;
+                resultMessage.className = 'result-message error';
+            }
+            
+            // Atualizar pontuação
+            document.getElementById('priorityScore').textContent = priority.score;
+            
+            // Mostrar botão para próximo cenário
+            document.getElementById('prioritySubmit').style.display = 'none';
+            document.getElementById('priorityNext').style.display = 'block';
+        }
+
+        function nextPriorityScenario() {
+            gameData.priority.currentScenario++;
+            
+            if (gameData.priority.currentScenario < gameData.priority.scenarios.length) {
+                updatePriorityUI();
+            } else {
+                // Fim do jogo de prioridades
+                gameData.priority.completed = true;
+                progress.priority = true;
+                updateProgress();
+                
+                document.getElementById('priorityQuestion').textContent = "Treino de prioridades concluído!";
+                document.getElementById('priorityNum').textContent = "4/4";
+                
+                const optionsContainer = document.getElementById('priorityOptions');
+                optionsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 30px;">
+                        <h3 style="color: #1e3c72; margin-bottom: 15px;">Resultado Final</h3>
+                        <p style="font-size: 1.2rem; margin-bottom: 10px;">Sua pontuação: <strong>${gameData.priority.score} de 100 pontos</strong></p>
+                        <p style="font-size: 1.1rem; color: ${gameData.priority.score >= 75 ? '#4CAF50' : '#f44336'}">
+                            ${gameData.priority.score >= 75 ? "🚦 Excelente! Você domina as regras de prioridade no trânsito!" : "📖 Continue praticando para entender melhor as prioridades!"}
+                        </p>
+                    </div>
+                `;
+                
+                document.getElementById('prioritySubmit').style.display = 'none';
+                document.getElementById('priorityNext').style.display = 'none';
+                document.getElementById('priorityResult').className = 'result-message';
+                document.getElementById('priorityResult').textContent = '';
+            }
+        }
+
+        // Inicializar o jogo quando a página carregar
+        window.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
